@@ -3,38 +3,58 @@
 /**
  * quick_sort - Sorts an array of integers in ascending order
  * using the Quick sort algorithm
- * @array: The array to be sorted
- * @size: Number of elements in the array
+ * @array: array to be sorted
+ * @size: No of elements in the array
  */
-
 void quick_sort(int *array, size_t size)
 {
-	if (size <= 1)
-	{
+	if (array == NULL || size < 2)
 		return;
-	}
 
-	int pivot_index = size - 1;
-	int j = 0;
-	int temp;
-	int i;
+	quick_sort_helper(array, 0, size - 1, size);
+}
 
-	for (i = 0; i < pivot_index; i++)
+
+/**
+ * quick_sort_helper - Helper function for quick_sort
+ * @array: The array to be sorted
+ * @l: Left index
+ * @r: right index
+ * @size: Number of elements in the array
+ */
+void quick_sort_helper(int *array, int l, int r, size_t size)
+{
+	int pivot;
+	int i, j;
+	int tmp;
+
+	if (l >= r)
+		return;
+
+	pivot = array[l];
+	i = l + 1;
+	j = r;
+
+	while (i <= j)
 	{
-		if (array[i] <= array[pivot_index])
+		if (array[i] < pivot && array[j] > pivot)
 		{
-			temp = array[i];
+			tmp = array[i];
 			array[i] = array[j];
-			array[j] = temp;
-			j++;
+			array[j] = tmp;
 		}
-		print_array(array, size);
+
+		if (array[i] >= pivot)
+			i++;
+
+		if (array[j] <= pivot)
+			j--;
 	}
-	temp = array[j];
 
-	array[j] = array[pivot_index];
-	array[pivot_index] = temp;
+	tmp = array[l];
+	array[l] = array[j];
+	array[j] = tmp;
 
-	quick_sort(array, j);
-	quick_sort(array + j + 1, size - j - 1);
+	quick_sort_helper(array, l, j - 1, size);
+	quick_sort_helper(array, j + 1, r, size);
 }
